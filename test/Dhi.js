@@ -6,7 +6,7 @@ contract('Dhi', function (accounts) {
             tokenInstance = instance;
             return tokenInstance.totalSupply();
         }).then(function (totalSupply) {
-            assert.equal(totalSupply.toNumber(), 3000000, 'total supply ');
+            assert.equal(totalSupply.toNumber(), 1000000, 'total supply ');
         })
     });
 })
