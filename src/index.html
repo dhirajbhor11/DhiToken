@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dhi Token</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+</head>
+
+<body>
+    <h1>DHI Wallet</h1>
+    <div class="text-center" id="loader" style="display: block;">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <div>
+        <div class="card" id="card" style="display: block;">
+            <div class="card-header">
+                <h4 id="userAddressView"></h4>
+            </div>
+            <div class="card-body">
+                <div class="container">
+                    <h1 class="display-4"><span id="mainBalanceView">00</span><span>DHI</span></h1>
+                    <p class="lead"> </p>
+                </div>
+                <div class="container">
+
+                    <p>
+                        <button class="btn btn-primary" type="button" data-toggle="collapse"
+                            data-target="#multiCollapseExample1" aria-expanded="false"
+                            aria-controls="multiCollapseExample1">Send</button>
+
+                        <button class="btn btn-primary" type="button" data-toggle="collapse"
+                            data-target="#multiCollapseExample2" aria-expanded="false"
+                            aria-controls="multiCollapseExample2">Approve</button>
+
+
+                        <button class="btn btn-primary" type="button" data-toggle="collapse"
+                            data-target="#multiCollapseExample3" aria-expanded="false"
+                            aria-controls="multiCollapseExample3" id="transferFromButton" hidden>Transfer From</button>
+                    </p>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="collapse multi-collapse" id="multiCollapseExample1">
+                                <div class="card card-body">
+
+                                    <div class="form-group">
+                                        <label for="toAddress">User Address</label>
+                                        <input type="text" class="form-control" id="toAddress">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="formControlRange">Amount ~ <sapn id="rangeAmountView">
+                                                1</sapn>
+                                            <span> DHI</span>
+                                        </label>
+                                        <input type="range" class="form-control-range" id="transferAmount"
+                                            oninput="showRangeAmount()" min="1">
+                                    </div>
+                                    <button type="submit" class="btn btn-outline-primary" data-toggle="modal"
+                                        data-target="#staticBackdrop" onclick="transferPopup()">Transfer</button>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="staticBackdrop" data-backdrop="static"
+                                        data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="staticBackdropLabel">Transfer</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="card text-center">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title">Reciver Address :</h5>
+                                                            <h4 class="card-text" id="transferAddressView"></h4>
+                                                            <h5 class="card-title">Amount :</h5>
+                                                            <h4 class="card-text">
+                                                                <span id="transferAmountView"></span> DHI</h4>
+                                                            <p class="card-text"><small class="text-muted">Remaing
+                                                                    Account Balance :<span
+                                                                        id="remaningAccountBal"></span>DHI</small></p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-dismiss="modal">Cancle</button>
+                                                    <button type="button" class="btn btn-primary" onclick=" transfer()"
+                                                        data-dismiss="modal">Confirm</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- for Approved button-->
+                    <div class="row">
+                        <div class="col">
+                            <div class="collapse multi-collapse" id="multiCollapseExample2">
+                                <div class="card card-body">
+
+                                    <div class="form-group">
+                                        <label for="recipientAddress">Recipient Address</label>
+                                        <input type="text" class="form-control" id="recipientAddress"
+                                            aria-describedby="emailHelp">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="approvedAmount">Amount</label>
+                                        <div class="input-group mb-2">
+                                            <input type="text" class="form-control" id="approvedAmount"
+                                                placeholder="Enter a Amount">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">DHI</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-outline-primary" data-toggle="modal"
+                                        data-target="#confirmPopup1" onclick="approvalPopup()">Grant</button>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="modal fade" id="confirmPopup1" data-backdrop="static" data-keyboard="false"
+                            tabindex="-1" aria-labelledby="confirmPopup1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="confirmPopup1">Approval To Pay </h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Recipient Address :</h5>
+                                                <h4 class="card-text" id="recipientAddressView"></h4>
+                                                <h5 class="card-title">Amount :</h5>
+                                                <h4 class="card-text">
+                                                    <span id="approvedAmountView"></span> DHI</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Cancle</button>
+                                        <button type="button" class="btn btn-primary" onclick=" approval()"
+                                            data-dismiss="modal">Confirm</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- for transfer From Button-->
+                    <div class="row">
+                        <div class="col">
+                            <div class="collapse multi-collapse" id="multiCollapseExample3">
+                                <div class="card card-body">
+
+                                    <div class="form-group">
+                                        <label for="fromAddress">Select Address</label>
+                                        <select class="custom-select" id="fromAddress"
+                                            onchange="setTransferFromAmount(event)">
+
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="toAddress">Reciver Address</label>
+                                        <input type="text" class="form-control" id="reciverAddress">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="formControlRange">Amount ~ <sapn id="tfrangeAmountView">
+                                                1</sapn>
+                                            <span> DHI</span>
+                                        </label>
+                                        <input type="range" class="form-control-range" id="transferFromAmount"
+                                            oninput="tfshowRangeAmount()" min="1">
+                                    </div>
+                                    <button type="submit" class="btn btn-outline-primary" data-toggle="modal"
+                                        data-target="#transferFromPopup" onclick="transferFromPopup()">Transfer</button>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="transferFromPopup" data-backdrop="static"
+                                        data-keyboard="false" tabindex="-1" aria-labelledby="transferFromPopup"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="transferFromPopup">Transfer</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="card text-center">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title">From Address :</h5>
+                                                            <h4 class="card-text" id="transferFromAddressView"></h4>
+                                                            <h5 class="card-title">To Address :</h5>
+                                                            <h4 class="card-text" id="transferFromReciverAddressView">
+                                                            </h4>
+                                                            <h5 class="card-title">Amount :</h5>
+                                                            <h4 class="card-text">
+                                                                <span id="transferFromAmountView"></span> DHI</h4>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-dismiss="modal">Cancle</button>
+                                                    <button type="button" class="btn btn-primary"
+                                                        onclick=" transferFrom()" data-dismiss="modal">Confirm</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+        <div class="container">
+            <div class="list-group" id="transactionList">
+
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+    <script src="./js/jquery.min.js"></script>
+    <!-- <script src="./js/DhiSaleInterface.json"></script> -->
+
+    <script src="./js/web3.min.js"></script>
+    <script src="./js/truffle-contract.min.js"></script>
+    <!-- <script src="./../build/contracts/DhiSale.json"></script> -->
+    <script src="./js/index.js"></script>
+</body>
+
+</html>
